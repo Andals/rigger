@@ -19,7 +19,11 @@ type actionConf struct {
 	Exec  []string
 }
 
-var aconf actionConf
+var aconf *actionConf
+
+func init() {
+	aconf = new(actionConf)
+}
 
 func parseActionConf(path string) {
 	if !misc.FileExist(path) {
@@ -45,4 +49,8 @@ func parseActionConf(path string) {
 
 		aconf.Exec[i] = cmd
 	}
+}
+
+func GetActionConf() *actionConf {
+	return aconf
 }

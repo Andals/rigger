@@ -32,7 +32,8 @@ func main() {
 	args := parseArgs(fs.Args())
 	rconf.Parse(rconfDir, args)
 
-	genConf()
+	genConfByTpl()
+	runAction()
 }
 
 func parseArgs(args []string) map[string]string {
@@ -48,7 +49,7 @@ func parseArgs(args []string) map[string]string {
 	return result
 }
 
-func genConf() {
+func genConfByTpl() {
 	for key, item := range rconf.GetTplConf() {
 		if !misc.FileExist(item.Tpl) {
 			panic("Gen conf " + key + " tpl " + item.Tpl + " not exists")
@@ -57,13 +58,36 @@ func genConf() {
 		dstString := rconf.ParseValueByDefinedWithPanic(key+" tpl ", string(tplBytes))
 		ioutil.WriteFile(item.Dst, []byte(dstString), 0644)
 
-		var cmd string
-		var cmdPrefix string
+		cmd := ""
+		cmdPrefix := ""
 		if item.Sudo {
 			cmdPrefix += "sudo "
 		}
 		cmd += cmdPrefix + "rm -f " + item.Ln + "; "
 		cmd += cmdPrefix + "ln -s " + item.Dst + " " + item.Ln
+
+		shell.RunCmdBindTerminal(cmd)
+	}
+}
+
+func runAction() {
+	aconf := rconf.GetActionConf()
+
+	for _, item := range aconf.Mkdir {
+		cmd := ""
+		cmdPrefix := ""
+		if item.Sudo {
+			cmdPrefix += "sudo "
+		}
+		if !misc.DirExist(item.Dir) {
+			cmd += cmdPrefix + "mkdir -p " + item.Dir + "; "
+		}
+		cmd += cmdPrefix + "chmod " + item.Mask + " " + item.Dir
+
+		shell.RunCmdBindTerminal(cmd)
+	}
+
+	for _, cmd := range aconf.Exec {
 		shell.RunCmdBindTerminal(cmd)
 	}
 }
