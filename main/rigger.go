@@ -56,17 +56,22 @@ func genConfByTpl() {
 		}
 		tplBytes, _ := ioutil.ReadFile(item.Tpl)
 		dstString := rconf.ParseValueByDefinedWithPanic(key+" tpl ", string(tplBytes))
-		ioutil.WriteFile(item.Dst, []byte(dstString), 0644)
-
-		cmd := ""
-		cmdPrefix := ""
-		if item.Sudo {
-			cmdPrefix += "sudo "
+		err := ioutil.WriteFile(item.Dst, []byte(dstString), 0644)
+		if err != nil {
+			panic("Gen conf" + key + " write dst " + item.Dst + " error: " + err.Error())
 		}
-		cmd += cmdPrefix + "rm -f " + item.Ln + "; "
-		cmd += cmdPrefix + "ln -s " + item.Dst + " " + item.Ln
 
-		shell.RunCmdBindTerminal(cmd)
+		if item.Ln != "" {
+			cmd := ""
+			cmdPrefix := ""
+			if item.Sudo {
+				cmdPrefix += "sudo "
+			}
+			cmd += cmdPrefix + "rm -f " + item.Ln + "; "
+			cmd += cmdPrefix + "ln -s " + item.Dst + " " + item.Ln
+
+			shell.RunCmdBindTerminal(cmd)
+		}
 	}
 }
 

@@ -12,9 +12,11 @@ import (
 )
 
 var varConf map[string]string
+var waitValues map[string]string //solve map no order
 
 func init() {
 	varConf = make(map[string]string)
+	waitValues = make(map[string]string)
 }
 
 func parseVarConf(path string) {
@@ -32,7 +34,6 @@ func parseVarConf(path string) {
 
 	// Run first loop since map is out-of-order so that read undefined var
 
-	waitValues := make(map[string]string)
 	for key, item := range varJsonConf {
 		str, succ := toString(item)
 		if !succ {

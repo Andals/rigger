@@ -21,34 +21,37 @@ func Parse(rconfDir string, args map[string]string) {
 	parseActionConf(rconfDir + "/action.json")
 }
 
+/**
+* @return value, undefined field
+ */
 func parseValueByDefined(value string) (string, string) {
 	re := regexp.MustCompile("\\${([^}]+)}")
 	matches := re.FindAllStringSubmatch(value, -1)
 
-	var undefined string
 	if len(matches) != 0 {
 		var rs []string
 		for _, item := range matches {
-			rs = append(rs, item[0])
 			k := item[1]
 			v, ok := varConf[k]
 			if !ok {
+				_, ok = waitValues[k]
+				if ok { //in waitValues since value has not been parsed
+					return value, k
+				}
 				v = shell.RunCmd("echo $" + k).Output
 				v = strings.TrimSpace(v)
 				if v == "" {
-					undefined = k
-					break
+					return value, k
 				}
 			}
+			rs = append(rs, item[0])
 			rs = append(rs, v)
 		}
 
-		if undefined == "" {
-			value = strings.NewReplacer(rs...).Replace(value)
-		}
+		value = strings.NewReplacer(rs...).Replace(value)
 	}
 
-	return value, undefined
+	return value, ""
 }
 
 func ParseValueByDefinedWithPanic(panicKey string, value string) string {
