@@ -33,10 +33,14 @@ func parseTplConf(path string) {
 
 	for key, item := range tplConf {
 		pkeyPrefix := "tpl " + key + " item "
-		item.Tpl = parseValueByDefinedWithPanic(pkeyPrefix+" tpl", item.Tpl)
-		item.Dst = parseValueByDefinedWithPanic(pkeyPrefix+" dst", item.Dst)
-		item.Ln = parseValueByDefinedWithPanic(pkeyPrefix+" ln", item.Ln)
+		item.Tpl = ParseValueByDefinedWithPanic(pkeyPrefix+" tpl", item.Tpl)
+		item.Dst = ParseValueByDefinedWithPanic(pkeyPrefix+" dst", item.Dst)
+		item.Ln = ParseValueByDefinedWithPanic(pkeyPrefix+" ln", item.Ln)
 
 		tplConf[key] = item
 	}
+}
+
+func GetTplConf() map[string]*tplItem {
+	return tplConf
 }

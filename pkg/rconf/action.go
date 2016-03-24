@@ -34,14 +34,14 @@ func parseActionConf(path string) {
 
 	for i, item := range aconf.Mkdir {
 		pkeyPrefix := "action mkdir " + strconv.Itoa(i) + " item "
-		item.Dir = parseValueByDefinedWithPanic(pkeyPrefix+" dir", item.Dir)
-		item.Mask = parseValueByDefinedWithPanic(pkeyPrefix+" mask", item.Mask)
+		item.Dir = ParseValueByDefinedWithPanic(pkeyPrefix+" dir", item.Dir)
+		item.Mask = ParseValueByDefinedWithPanic(pkeyPrefix+" mask", item.Mask)
 
 		aconf.Mkdir[i] = item
 	}
 	for i, cmd := range aconf.Exec {
 		pkey := "action exec " + strconv.Itoa(i) + " cmd "
-		cmd = parseValueByDefinedWithPanic(pkey, cmd)
+		cmd = ParseValueByDefinedWithPanic(pkey, cmd)
 
 		aconf.Exec[i] = cmd
 	}

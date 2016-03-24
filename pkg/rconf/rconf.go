@@ -13,7 +13,7 @@ func init() {
 	extArgs = make(map[string]string)
 }
 
-func Init(rconfDir string, args map[string]string) {
+func Parse(rconfDir string, args map[string]string) {
 	extArgs = args
 
 	parseVarConf(rconfDir + "/var.json")
@@ -51,7 +51,7 @@ func parseValueByDefined(value string) (string, string) {
 	return value, undefined
 }
 
-func parseValueByDefinedWithPanic(panicKey string, value string) string {
+func ParseValueByDefinedWithPanic(panicKey string, value string) string {
 	value, undefined := parseValueByDefined(value)
 	if undefined != "" {
 		panic("Parse " + panicKey + " has undefined field " + undefined)
