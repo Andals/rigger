@@ -24,5 +24,10 @@
 
     "SERVER_CONF_TPL": "${TPL_CONF_ROOT}/tpl_server_conf.php",
     "SERVER_CONF_DST": "${PRJ_CONF_ROOT}/server/${USER}_server_conf.php",
-    "SERVER_CONF_LN": "${PRJ_CONF_ROOT}/server_conf.php"
+    "SERVER_CONF_LN": "${PRJ_CONF_ROOT}/server_conf.php",
+
+    "NGX_EXEC_PREFIX": {
+        "ligang": "/usr/local/bin/dexec nginx",
+        "default": "sudo /usr/local/nginx/sbin/nginx"
+    }
 }

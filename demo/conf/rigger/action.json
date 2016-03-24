@@ -1,0 +1,22 @@
+{
+    "mkdir": [
+    {
+        "dir": "${PRJ_HOME}/tmp",
+        "mask": "777",
+        "sudo": false
+    },
+    {
+        "dir": "${PRJ_HOME}/logs/front",
+        "mask": "777",
+        "sudo": false
+    },
+    {
+        "dir": "${PRJ_HOME}/logs/task",
+        "mask": "755",
+        "sudo": false
+    }
+    ],
+    "exec": [
+        "${NGX_EXEC_PREFIX} -s reload"
+    ]
+}

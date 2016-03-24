@@ -2,7 +2,6 @@ package rconf
 
 import (
 	"andals/gobox/misc"
-	"andals/gobox/shell"
 	"encoding/json"
 	//     "fmt"
 	"io/ioutil"
@@ -25,10 +24,10 @@ func parseVarConf(path string) {
 
 	var varJsonConf map[string]interface{}
 
-	jsonStr, _ := ioutil.ReadFile(path)
-	err := json.Unmarshal(jsonStr, &varJsonConf)
+	jsonBytes, _ := ioutil.ReadFile(path)
+	err := json.Unmarshal(jsonBytes, &varJsonConf)
 	if nil != err {
-		panic("Parse var conf error")
+		panic("Parse var conf error: " + err.Error())
 	}
 
 	// Run first loop since map is out-of-order so that read undefined var
@@ -77,36 +76,6 @@ func toString(item interface{}) (string, bool) {
 	}
 
 	return strings.TrimSpace(r), succ
-}
-
-func parseValueByDefined(value string) (string, string) {
-	re := regexp.MustCompile("\\${([^}]+)}")
-	matches := re.FindAllStringSubmatch(value, -1)
-
-	var undefined string
-	if len(matches) != 0 {
-		var rs []string
-		for _, item := range matches {
-			rs = append(rs, item[0])
-			k := item[1]
-			v, ok := varConf[k]
-			if !ok {
-				v = shell.RunCmd("echo $" + k).Output
-				v = strings.TrimSpace(v)
-				if v == "" {
-					undefined = k
-					break
-				}
-			}
-			rs = append(rs, v)
-		}
-
-		if undefined == "" {
-			value = strings.NewReplacer(rs...).Replace(value)
-		}
-	}
-
-	return value, undefined
 }
 
 func parseValueByFunc(key string, value string) string {
