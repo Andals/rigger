@@ -1,0 +1,32 @@
+server {
+    listen ${NGX_PORT};
+    server_name ${FRONT_DOMAIN};
+    server_tokens off;
+
+	keepalive_timeout 5;
+
+    root ${PRJ_HOME}/run/front/;
+    index index.php;
+
+    charset utf-8;
+
+    gzip on;
+    gzip_comp_level 6;
+    gzip_min_length 500;
+    gzip_types text/plain text/css text/javascript application/xml application/x-javascript; 
+
+    access_log logs/${FRONT_ACCESS_LOG} combinedio buffer=${ACCESS_LOG_BUFFER}k;
+    error_log  logs/${FRONT_ERROR_LOG};
+
+    location ~ \.php$ {
+        fastcgi_pass 127.0.0.1:9000;
+
+        include fastcgi.conf;
+
+        client_max_body_size 1m;
+        fastcgi_connect_timeout 5s;
+        fastcgi_send_timeout 5s;
+        fastcgi_read_timeout 5s;
+        fastcgi_intercept_errors on;
+    }
+}
