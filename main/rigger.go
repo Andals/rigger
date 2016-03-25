@@ -29,14 +29,16 @@ func main() {
 		panic("must have flag rconfDir")
 	}
 
-	args := parseArgs(fs.Args())
-	rconf.Parse(rconfDir, args)
+	extArgs := parseExtArgs(fs.Args())
 
-	genConfByTpl()
-	runAction()
+	rconfPtr := rconf.NewRiggerConf(rconfDir, extArgs)
+	rconfPtr.Parse()
+
+	genConfByTpl(rconfPtr)
+	runAction(rconfPtr)
 }
 
-func parseArgs(args []string) map[string]string {
+func parseExtArgs(args []string) map[string]string {
 	result := make(map[string]string)
 
 	for _, str := range args {
@@ -49,13 +51,13 @@ func parseArgs(args []string) map[string]string {
 	return result
 }
 
-func genConfByTpl() {
-	for key, item := range rconf.GetTplConf() {
+func genConfByTpl(rconfPtr *rconf.RiggerConf) {
+	for key, item := range rconfPtr.GetTplConf() {
 		if !misc.FileExist(item.Tpl) {
 			panic("Gen conf " + key + " tpl " + item.Tpl + " not exists")
 		}
 		tplBytes, _ := ioutil.ReadFile(item.Tpl)
-		dstString := rconf.ParseValueByDefinedWithPanic(key+" tpl ", string(tplBytes))
+		dstString, _ := rconfPtr.ParseValueByDefined(key+" tpl ", string(tplBytes))
 		err := ioutil.WriteFile(item.Dst, []byte(dstString), 0644)
 		if err != nil {
 			panic("Gen conf" + key + " write dst " + item.Dst + " error: " + err.Error())
@@ -75,8 +77,8 @@ func genConfByTpl() {
 	}
 }
 
-func runAction() {
-	aconf := rconf.GetActionConf()
+func runAction(rconfPtr *rconf.RiggerConf) {
+	aconf := rconfPtr.GetActionConf()
 
 	for _, item := range aconf.Mkdir {
 		cmd := ""
