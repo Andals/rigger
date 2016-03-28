@@ -37,9 +37,7 @@ function convertEnv($ENV)
         'default' => 'sudo /usr/local/nginx/sbin/nginx',
     );
 
-    $data = json_encode($data, JSON_PRETTY_PRINT);
-
-    file_put_contents(__DIR__.'/var.json', $data);
+    save('var', $data);
 }
 
 function convertPrj($PRJ)
@@ -66,14 +64,19 @@ function convertPrj($PRJ)
         }
     }
 
-    $data = json_encode($data, JSON_PRETTY_PRINT);
-
-    file_put_contents(__DIR__.'/action.json', $data);
+    save('action', $data);
 }
 
 function convertSys($SYS)
 {
-    $data = json_encode(current($SYS), JSON_PRETTY_PRINT);
+    save('tpl', current($SYS));
+}
 
-    file_put_contents(__DIR__.'/tpl.json', $data);
+function save($key, $data)
+{
+    $path = dirname($_SERVER['argv'][1]).'/'.$key.'.json';
+    $contents = json_encode($data, JSON_PRETTY_PRINT);
+    $contents = str_replace('\\/', '/', $contents);
+
+    file_put_contents($path, $contents);
 }
