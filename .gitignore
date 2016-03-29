@@ -5,6 +5,8 @@ tags
 tmp
 logs
 
+verdor
+
 demo/conf/server_conf.json
 demo/conf/server/*_server_conf.json
 demo/conf/http/*_http.conf*

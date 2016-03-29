@@ -10,8 +10,11 @@ then
     exit 1
 fi
 
-
+echo "Make sure you have sshpass in PATH"
 echo "Make sure you have sudo permission of online hosts"
+
+echo "Enter username of online hosts: "
+read username
 echo "Enter your password of online hosts: "
 read -s password
 sshCmd="sshpass -p $password ssh -o StrictHostKeyChecking=no"
@@ -35,8 +38,8 @@ installDstDir=/usr/local/bin
 for host in $*
 do
     echo Deploy to $host
-    $scpCmd $binName $host:./
-    $sshCmd -t $host "echo $password | sudo -S mv $binName $installDstDir"
+    $scpCmd $binName $username@$host:./
+    $sshCmd -t $username@$host "echo $password | sudo -S mv $binName $installDstDir"
 done
 
 
