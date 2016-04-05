@@ -69,7 +69,16 @@ function convertPrj($PRJ)
 
 function convertSys($SYS)
 {
-    save('tpl', current($SYS));
+    $data = array();
+
+    foreach ($SYS as $skey => $sdata) {
+        foreach ($sdata as $k => $item) {
+            $key = $skey.'_'.$k;
+            $data[$key] = $item;
+        }
+    }
+
+    save('tpl', $data);
 }
 
 function save($key, $data)
