@@ -1,5 +1,5 @@
 {
-    "name": "ligang/dockerbox",
+    "name": "andals/rigger",
     "dependencies": {
         "andals/gobox": "git+ssh://git@github.com:Andals/gobox.git"
     }

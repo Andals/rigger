@@ -5,7 +5,7 @@ tags
 tmp
 logs
 
-verdor
+vendor
 
 demo/conf/server_conf.json
 demo/conf/server/*_server_conf.json
