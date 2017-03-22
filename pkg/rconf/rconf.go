@@ -84,7 +84,7 @@ func (this *RiggerConf) ParseValueByDefined(key string, value string) (string, b
 					return value, true
 				}
 			}
-			v = shell.RunCmd("echo $" + k).Output
+			v = string(shell.RunCmd("echo $" + k).Output)
 			v = strings.TrimSpace(v)
 			if v == "" {
 				panic("Parse " + key + " has undefined field " + k)
