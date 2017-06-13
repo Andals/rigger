@@ -1,6 +1,6 @@
 {
     "name": "andals/rigger",
     "dependencies": {
-        "andals/gobox": "git+ssh://git@github.com:Andals/gobox.git#v1.0.0"
+        "andals/gobox": "git+https://github.com/Andals/gobox.git#v1.0.0"
     }
 }
