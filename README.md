@@ -1,3 +1,3 @@
 # rigger
 
-[wiki](https://github.com/Andals/rigger/wiki)
+Move to [rigger](https://github.com/ligang1109/rigger)
